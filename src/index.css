@@ -1,0 +1,14 @@
+a {
+  text-decoration: none;
+}
+
+.burger_btn {
+  display: none !important;
+}
+
+@media screen and (max-width: 1200px) {
+  .burger_btn {
+    display: block !important;
+  }
+}
+

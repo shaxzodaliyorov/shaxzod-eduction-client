@@ -1,0 +1,593 @@
+import React from 'react'
+import { useState, useRef } from 'react'
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import COURSES from '../services/courses/Courses'
+import { useSelector } from 'react-redux'
+import VIDEOS from '../services/videos/Videos'
+import USER from '../services/users/User'
+
+
+const Admin = () => {
+
+   const { user } = useSelector(state => state.AuthLogin)
+   const [title, setTitle] = useState("")
+   const [tech, setTech] = useState("")
+   const [Courseimg, setCourseImg] = useState("")
+   const [Price, setPrice] = useState("")
+   const [Dagree, setDagree] = useState("Boshlang'ich")
+   const [Language, setLanguage] = useState("Uzbek Tili")
+   const [Hours, setHours] = useState("")
+   const [courseID, setCourseID] = useState("")
+   const [allvideos, setAllVideos] = useState([])
+   const ModalRef = useRef()
+   const [result, setResult] = useState([])
+   const [selectCourse, setSelectCourse] = useState(localStorage.getItem('courseid') ? localStorage.getItem('courseid') : "")
+   const [Users, setUsers] = useState([])
+   const [techimg, setTechimg] = useState('')
+   const [discription, setDiscription] = useState('')
+   const getCourses = async () => {
+      const data = await COURSES.GET()
+      setResult(data)
+      localStorage.setItem('courseid', data[0]._id)
+   }
+
+   const GetAllvideos = async () => {
+      const videos = await VIDEOS.GETALL()
+      setAllVideos(videos)
+   }
+
+   const ImgReader = async (e) => {
+
+      if (e.target.name === "techimg") {
+         const reader = new FileReader()
+         reader.readAsDataURL(await e.target.files[0])
+         reader.onload = () => {
+            setTechimg(reader.result)
+
+         }
+      }
+      if (e.target.name === "courseimg") {
+         const reader = new FileReader()
+         reader.readAsDataURL(await e.target.files[0])
+         reader.onload = () => {
+            setCourseImg(reader.result)
+         }
+      }
+   }
+
+
+
+   const FileReaderChange = e => {
+      ImgReader(e)
+   }
+
+   const AddCourse = async e => {
+      e.preventDefault()
+      try {
+         const courseData = { title: title, courseImg: Courseimg, price: Price, dagree: Dagree, language: Language, hours: Hours, tech: tech, techimg, discription: discription }
+         const data = await COURSES.ADDCOURSE(user._id, courseData)
+         setTitle("")
+         setPrice("")
+         setLanguage("")
+         setTech("")
+         setHours("")
+         setDagree("")
+         setCourseID("")
+         getCourses()
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+   const EditSubmit = async e => {
+      e.preventDefault()
+      try {
+         const courseData = { title: title, courseImg: Courseimg, price: Price, dagree: Dagree, language: Language, hours: Hours, tech: tech, userid: user._id }
+         const data = await COURSES.UPDATE(courseID, courseData)
+         setTitle("")
+         setPrice("")
+         setLanguage("")
+         setTech("")
+         setHours("")
+         setDagree("")
+         setCourseID("")
+         getCourses()
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+   const edtModal = (item) => {
+      setTitle(item.title)
+      setPrice(item.price)
+      setLanguage(item.language)
+      setTech(item.tech)
+      setHours(item.hours)
+      setDagree(item.dagree)
+      setCourseID(item._id)
+   }
+   const DeleteCourse = async id => {
+      try {
+         await COURSES.DELETE(id, user._id)
+         getCourses()
+         GetAllvideos()
+      } catch (error) {
+         console.log(error)
+      }
+   }
+   const addVideoSubmit = async e => {
+      e.preventDefault()
+      try {
+         const videodata = { title, videolink: tech, videoLength: Price }
+         const result = await VIDEOS.ADDVIDEO(selectCourse, user._id, videodata)
+         setTitle("")
+         setPrice("")
+         setLanguage("")
+         setTech("")
+         setHours("")
+         setDagree("")
+         setCourseID("")
+         getCourses()
+         GetAllvideos()
+      } catch (error) {
+         console.log(error)
+      }
+   }
+   console.log(selectCourse)
+
+   const deleteVideo = async (item) => {
+      try {
+         const video = await VIDEOS.DELETE(item._id, user._id)
+         getCourses()
+         GetAllvideos()
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+   const UpdateVideo = item => {
+      try {
+         setTitle(item.title)
+         setTech(item.videolink)
+         setPrice(item.videoLength)
+         setCourseID(item._id)
+      } catch (error) {
+         console.log(error)
+      }
+   }
+   const UpdateVideoSubmit = async (e) => {
+      e.preventDefault()
+      try {
+         const updateVideoData = { title, videolink: tech, videoLength: Price }
+         const updateVideo = await VIDEOS.UPDATE(courseID, user._id, updateVideoData)
+         setTitle("")
+         setPrice("")
+         setLanguage("")
+         setTech("")
+         setHours("")
+         setDagree("")
+         setCourseID("")
+         getCourses()
+         GetAllvideos()
+      } catch (error) {
+         console.log(error)
+      }
+   }
+   const GetAllUsers = async () => {
+      const users = await USER.GETALLUSERS(user._id)
+      setUsers(users)
+   }
+   useEffect(() => {
+      getCourses()
+      GetAllvideos()
+      GetAllUsers()
+   }, [])
+   return (
+      <main id='main' className='main' >
+         <div className="pagetitle">
+            <h1>Admin</h1>
+            <nav>
+               <ol className="breadcrumb">
+                  <li className="breadcrumb-item"><Link to="/">Bosh Sahifa</Link></li>
+                  <li className="breadcrumb-item active" >Admin</li>
+               </ol>
+            </nav>
+         </div>
+         <section className='section' >
+            {/* full course */}
+            <div className="card">
+               <div className="card-body">
+                  <div className="row">
+                     <div className="col-6">
+                        <h5 className='card-title' >Full Coures</h5>
+                     </div>
+                     <div className="col-6 text-end">
+                        <button className='btn btn-success btn-sm ' data-bs-toggle="modal" data-bs-target="#basicModal" >Add Course</button>
+                     </div>
+                  </div>
+                  <table className='table table-bordered border-primary' >
+                     <thead>
+                        <tr>
+                           <th>
+                              №
+                           </th>
+                           <th>
+                              Title
+                           </th>
+                           <th>
+                              Videos
+                           </th>
+                           <th>
+                              Tech
+                           </th>
+                           <th>
+                              CourseImg
+                           </th>
+                           <th>
+                              Price
+                           </th>
+                           <th>
+                              Dagree
+                           </th>
+                           <th>
+                              Language
+                           </th>
+                           <th>
+                              Hours
+                           </th>
+                           <th className='text-info' >
+                              Edit
+                           </th>
+                           <th className='text-danger' >
+                              Delete
+                           </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {result.map((item, index) => {
+                           return <tr key={index} >
+                              <td>{index + 1}</td>
+                              <td>{item.title}</td>
+                              <td>{item.videos.length}</td>
+                              <td>{item.tech}</td>
+                              <td><img src={item.courseImg} style={{ width: "50px" }} /></td>
+                              <td>{item.price}</td>
+                              <td>{item.dagree}</td>
+                              <td>{item.language}</td>
+                              <td>{item.hours}</td>
+                              <td><button className='btn btn-sm btn-info' data-bs-toggle="modal" data-bs-target="#basicModal1" onClick={() => edtModal(item)} >Edit</button></td>
+                              <td><button className='btn btn-sm btn-danger' onClick={() => DeleteCourse(item._id)} >Delete</button></td>
+                           </tr>
+                        })}
+                     </tbody>
+                  </table>
+               </div>
+               {/* add Modal */}
+               <div className="modal fade" id="basicModal" tabIndex="-1" aria-modal="true" role="dialog" style={{ display: "none" }} ref={ModalRef} >
+                  <div className="modal-dialog">
+                     <div className="modal-content">
+                        <div className="modal-header">
+                           <h5 className="modal-title">Add Course</h5>
+                           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                           <form onSubmit={AddCourse} >
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Title</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Tech</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={tech} onChange={e => setTech(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">CourseImg</label>
+                                 <div className="col-sm-10">
+                                    <input type="file" className="form-control" onChange={FileReaderChange} name="courseimg" />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">TechImg</label>
+                                 <div className="col-sm-10">
+                                    <input type="file" className="form-control" onChange={FileReaderChange} name="techimg" />
+                                 </div>
+                              </div>
+                              <div className="input-group mb-3">
+                                 <span className="input-group-text">$</span>
+                                 <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" value={Price} onChange={e => setPrice(e.target.value)} />
+                                 <span className="input-group-text">.00</span>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Dagree</label>
+                                 <div className="col-sm-10">
+                                    <select name="" id="" value={Dagree} onChange={e => setDagree(e.target.value)} >
+                                       <option value="Boshlang'ich">Boshlang'ich</option>
+                                       <option value="O'rta">O'rta</option>
+                                       <option value="Murakkab">Murakkab</option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Language</label>
+                                 <div className="col-sm-10">
+                                    <select name="" id="" value={Language} onChange={e => setLanguage(e.target.value)} >
+                                       <option value="Uzbek Tili">Uzbek Tili</option>
+                                       <option value="Ingis Tili">Ingis Tili</option>
+                                       <option value="Rus Tili">Rus Tili</option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label"  >Hours</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={Hours} onChange={e => setHours(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label"  >Discription</label>
+                                 <div className="col-sm-10">
+                                    <textarea className='form-control' cols="10" rows="3" value={discription} onChange={e => setDiscription(e.target.value)} ></textarea>
+                                 </div>
+                              </div>
+                              <div className="modal-footer">
+                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                 <button type="submit" className="btn btn-primary">Save</button>
+                              </div>
+                           </form>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               {/* edit Modal */}
+               <div className="modal fade" id="basicModal1" tabIndex="-1" aria-modal="true" role="dialog" style={{ display: "none" }} ref={ModalRef} >
+                  <div className="modal-dialog">
+                     <div className="modal-content">
+                        <div className="modal-header">
+                           <h5 className="modal-title">Edit </h5>
+                           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                           <form onSubmit={EditSubmit} >
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Title</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Tech</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={tech} onChange={e => setTech(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">CourseImg</label>
+                                 <div className="col-sm-10">
+                                    <input type="file" disabled={true} className="form-control" onChange={FileReaderChange} />
+                                 </div>
+                              </div>
+                              <div className="input-group mb-3">
+                                 <span className="input-group-text">$</span>
+                                 <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" value={Price} onChange={e => setPrice(e.target.value)} />
+                                 <span className="input-group-text">.00</span>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Dagree</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={Dagree} onChange={e => setDagree(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Language</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={Language} onChange={e => setLanguage(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label"  >Hours</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={Hours} onChange={e => setHours(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="modal-footer">
+                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                 <button type="submit" className="btn btn-primary">Save</button>
+                              </div>
+                           </form>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               {/* add video modal */}
+               <div className="modal fade" id="basicModal2" tabIndex="-1" aria-modal="true" role="dialog" style={{ display: "none" }} ref={ModalRef} >
+                  <div className="modal-dialog">
+                     <div className="modal-content">
+                        <div className="modal-header">
+                           <h5 className="modal-title">Add Video </h5>
+                           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                           <form onSubmit={addVideoSubmit} >
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Title</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">videolink</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={tech} onChange={e => setTech(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">videoLength</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={Price} onChange={e => setPrice(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Course</label>
+                                 <div className="col-sm-10">
+                                    <select name="" id="" value={selectCourse} onChange={e => setSelectCourse(e.target.value)}  >
+                                       {result.map((item, index) => {
+                                          return <option key={index} value={item._id} >{item.title}</option>
+                                       })}
+                                    </select>
+                                 </div>
+                              </div>
+                              <div className="modal-footer">
+                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                 <button type="submit" className="btn btn-primary">Save</button>
+                              </div>
+                           </form>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               {/* edit video modal */}
+               <div className="modal fade" id="basicModal3" tabIndex="-1" aria-modal="true" role="dialog" style={{ display: "none" }} ref={ModalRef} >
+                  <div className="modal-dialog">
+                     <div className="modal-content">
+                        <div className="modal-header">
+                           <h5 className="modal-title">Edit Video </h5>
+                           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                           <form onSubmit={UpdateVideoSubmit} >
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Title</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">videolink</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={tech} onChange={e => setTech(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">videoLength</label>
+                                 <div className="col-sm-10">
+                                    <input type="text" className="form-control" value={Price} onChange={e => setPrice(e.target.value)} />
+                                 </div>
+                              </div>
+                              <div className="row mb-3">
+                                 <label htmlFor="inputText" className="col-sm-2 col-form-label">Course</label>
+                                 <div className="col-sm-10">
+                                    <select name="" id="" onChange={e => setSelectCourse(e.target.value)} disabled={true} >
+                                       {result.map((item, index) => {
+                                          return <option key={index} value={item._id}  >{item.title}</option>
+                                       })}
+                                    </select>
+                                 </div>
+                              </div>
+                              <div className="modal-footer">
+                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                 <button type="submit" className="btn btn-primary">Save</button>
+                              </div>
+                           </form>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div className="card">
+               <div className="card-body">
+                  <div className="row">
+                     <div className="col-6">
+                        <h5 className='card-title' > Courses Videos</h5>
+                     </div>
+                     <div className="col-6 text-end mt-2">
+                        <button className='btn btn-sm btn-success' data-bs-toggle="modal" data-bs-target="#basicModal2"  >Add Video</button>
+                     </div>
+                  </div>
+                  <table className='table table-bordered border-primary' >
+                     <thead>
+                        <tr>
+                           <th>
+                              №
+                           </th>
+                           <th>
+                              Title
+                           </th>
+                           <th>
+                              videolink
+                           </th>
+                           <th>
+                              Time
+                           </th>
+                           <th>
+                              course
+                           </th>
+                           <th className='text-info' >
+                              Edit
+                           </th>
+                           <th className='text-danger' >
+                              Delete
+                           </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {allvideos.map((item, index) => {
+                           return <tr key={index} >
+                              <td>{index + 1}</td>
+                              <td>{item.title}</td>
+                              <td>{item.videolink}</td>
+                              <td>{item.videoLength}</td>
+                              <td>{item.coursetitle}</td>
+                              <td><button className='btn btn-sm btn-info' data-bs-toggle="modal" data-bs-target="#basicModal3" onClick={() => UpdateVideo(item)} >Edit</button></td>
+                              <td><button className='btn btn-sm btn-danger' onClick={() => deleteVideo(item)} >Delete</button></td>
+                           </tr>
+                        })}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div className="card">
+               <div className="card-body">
+                  <h5 className='card-tite' >Users</h5>
+                  <table className='table table-bordered border-primary' >
+                     <thead>
+                        <tr>
+                           <th>№</th>
+                           <th className='text-center' >Pic</th>
+                           <th>FirstName</th>
+                           <th>LastName</th>
+                           <th>Email</th>
+                           <th>Country</th>
+                           <th>Aboutme</th>
+                           <th>Edit</th>
+                           <th>Delete</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {Users.map((item, index) => {
+                           return <tr key={index} >
+                              <td>{index + 1}</td>
+                              <td className='text-center' >{item.profilepic ? <img src={item.profilepic} style={{ width: "35px", height: "35px", borderRadius: "50%" }} alt="" /> : <i className='bi bi-person-circle rounded-circle mb-1' style={{ fontSize: "25px" }} ></i>}</td>
+                              <td>{item.firstname}</td>
+                              <td>{item.lastname}</td>
+                              <td>{item.email}</td>
+                              <td>{item.country}</td>
+                              <td>{item.aboutme.slice(0, 15)}...</td>
+                              <td><button className='btn btn-sm btn-info' disabled={true} >Edit</button></td>
+                              <td><button className='btn btn-sm btn-danger' disabled={true} >Delete</button></td>
+                           </tr>
+                        })}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </section>
+      </main>
+   )
+}
+
+export default Admin
