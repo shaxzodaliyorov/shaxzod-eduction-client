@@ -9,10 +9,8 @@ const Home = () => {
    const [loading, setLoading] = useState(false)
    useEffect(() => {
       const GetCourses = async () => {
-         setLoading(true)
          const courses = await COURSES.GET()
          setResult(courses)
-         setLoading(false)
       }
       GetCourses()
    }, [])
@@ -103,11 +101,11 @@ const Home = () => {
                      <h3 className='' >Barcha Kurslar</h3>
                   </div>
                </div>
-               {loading ? <Loader /> : <div className="row">
+               <div className="row">
                   {result.map((item, index) => {
                      return <CourseCard price={item.price} id={item._id} courseImg={item.courseImg} tech={item.tech} title={item.title} key={index} techimg={item.techimg} />
                   })}
-               </div>}
+               </div>
             </section>
          </main>
       </>
