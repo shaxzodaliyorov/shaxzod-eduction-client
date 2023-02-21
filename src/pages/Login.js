@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { SetItem } from '../hooks/LocalStorge'
 import { ErrorLogined, SuccessLogined } from '../redux/Reducers/Auth/AuthLogin'
 import Error from '../Components/Error'
+import 'react-toastify/dist/ReactToastify.css'
+import { toast } from 'react-toastify'
 const Login = () => {
 
    const navigate = useNavigate()
@@ -79,10 +81,22 @@ const Login = () => {
                SetItem('token', data.token)
                dispatch(SuccessLogined())
                navigate('/')
+               toast.success('Tizmga Mufaqiyatli kirildi !', {
+                  position: 'top-right',
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  theme: 'dark'
+               })
             } catch (error) {
                setIsloading(false)
                console.log(error)
                dispatch(ErrorLogined(error.response.data.err))
+               toast.error("Server yoki Internet Muamosi !", {
+                  position: 'top-right',
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  theme: 'dark'
+               })
             }
          }
       }

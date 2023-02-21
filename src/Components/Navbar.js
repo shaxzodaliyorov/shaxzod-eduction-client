@@ -3,8 +3,8 @@ import profile from '../images/profile-img.jpg'
 import logo from '../images/logo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { RemoveItem } from '../hooks/LocalStorge'
 import { logOunt } from '../redux/Reducers/Auth/AuthLogin'
+import { toast } from 'react-toastify'
 const Navbar = () => {
    const dispatch = useDispatch()
 
@@ -21,6 +21,12 @@ const Navbar = () => {
       localStorage.removeItem('courseid')
       navigate('/login')
       dispatch(logOunt())
+      toast.warning('Tizmda Chiqdingiz !', {
+         position: 'top-right',
+         autoClose: 2000,
+         hideProgressBar: false,
+         theme: 'dark'
+      })
    }
 
    const { logined } = useSelector(state => state.AuthLogin)

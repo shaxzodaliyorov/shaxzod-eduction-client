@@ -6,7 +6,8 @@ import COURSES from '../services/courses/Courses'
 import { useSelector } from 'react-redux'
 import VIDEOS from '../services/videos/Videos'
 import USER from '../services/users/User'
-
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Admin = () => {
 
@@ -75,8 +76,20 @@ const Admin = () => {
          setDagree("")
          setCourseID("")
          getCourses()
+         toast.success('Yangi Kurs Qo\'shildi ', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       } catch (error) {
          console.log(error)
+         toast.warning('Kurs Qo\'shilmadi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       }
    }
 
@@ -93,8 +106,20 @@ const Admin = () => {
          setDagree("")
          setCourseID("")
          getCourses()
+         toast.info('Kurs Tahrirlandi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       } catch (error) {
          console.log(error)
+         toast.info('Kurs Tahrirlanmadi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       }
    }
 
@@ -112,8 +137,20 @@ const Admin = () => {
          await COURSES.DELETE(id, user._id)
          getCourses()
          GetAllvideos()
+         toast.error('Kurs O\'chirildi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       } catch (error) {
          console.log(error)
+         toast.warning('Kurs O\'chirilmadi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       }
    }
    const addVideoSubmit = async e => {
@@ -130,19 +167,41 @@ const Admin = () => {
          setCourseID("")
          getCourses()
          GetAllvideos()
+         toast.success('Video Qo\'shildi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       } catch (error) {
          console.log(error)
+         toast.warning('Video Qo\'shilmadi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       }
    }
-   console.log(selectCourse)
 
    const deleteVideo = async (item) => {
       try {
          const video = await VIDEOS.DELETE(item._id, user._id)
          getCourses()
          GetAllvideos()
+         toast.error('Video O\'chirli !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       } catch (error) {
-         console.log(error)
+         toast.warning('Video O\'chirilmadi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       }
    }
 
@@ -152,8 +211,10 @@ const Admin = () => {
          setTech(item.videolink)
          setPrice(item.videoLength)
          setCourseID(item._id)
+
       } catch (error) {
          console.log(error)
+
       }
    }
    const UpdateVideoSubmit = async (e) => {
@@ -170,8 +231,20 @@ const Admin = () => {
          setCourseID("")
          getCourses()
          GetAllvideos()
+         toast.info('Video Tahrirladi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       } catch (error) {
          console.log(error)
+         toast.warning('Video Tahrirlanmadi !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            theme: 'dark'
+         })
       }
    }
    const GetAllUsers = async () => {
