@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom'
 import CourseCard from '../Components/CourseCard'
 import COURSES from '../services/courses/Courses'
 import Loader from '../Components/Loader'
+import Loading from '../Components/Loading'
 const Home = () => {
    const [result, setResult] = useState([])
    const [loading, setLoading] = useState(false)
    useEffect(() => {
       const GetCourses = async () => {
+         setLoading(true)
          const courses = await COURSES.GET()
+         setLoading(false)
          setResult(courses)
       }
       GetCourses()
@@ -101,11 +104,11 @@ const Home = () => {
                      <h3 className='' >Barcha Kurslar</h3>
                   </div>
                </div>
-               <div className="row">
+               {loading ? <Loading /> : <div className="row">
                   {result.map((item, index) => {
                      return <CourseCard price={item.price} id={item._id} courseImg={item.courseImg} tech={item.tech} title={item.title} key={index} techimg={item.techimg} />
                   })}
-               </div>
+               </div>}
             </section>
          </main>
       </>

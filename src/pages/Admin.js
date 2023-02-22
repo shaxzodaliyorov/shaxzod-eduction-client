@@ -27,6 +27,7 @@ const Admin = () => {
    const [Users, setUsers] = useState([])
    const [techimg, setTechimg] = useState('')
    const [discription, setDiscription] = useState('')
+   const [videoid, setVideoid] = useState('')
    const getCourses = async () => {
       const data = await COURSES.GET()
       setResult(data)
@@ -206,29 +207,23 @@ const Admin = () => {
    }
 
    const UpdateVideo = item => {
-      try {
-         setTitle(item.title)
-         setTech(item.videolink)
-         setPrice(item.videoLength)
-         setCourseID(item._id)
-
-      } catch (error) {
-         console.log(error)
-
-      }
+      setTitle(item.title)
+      setTech(item.videolink)
+      setPrice(item.videoLength)
+      setVideoid(item._id)
    }
    const UpdateVideoSubmit = async (e) => {
       e.preventDefault()
       try {
          const updateVideoData = { title, videolink: tech, videoLength: Price }
-         const updateVideo = await VIDEOS.UPDATE(courseID, user._id, updateVideoData)
+         const updateVideo = await VIDEOS.UPDATE(videoid, user._id, updateVideoData)
          setTitle("")
          setPrice("")
          setLanguage("")
          setTech("")
          setHours("")
          setDagree("")
-         setCourseID("")
+         setVideoid("")
          getCourses()
          GetAllvideos()
          toast.info('Video Tahrirladi !', {
@@ -255,7 +250,7 @@ const Admin = () => {
       getCourses()
       GetAllvideos()
       GetAllUsers()
-   }, [])
+   }, [courseID])
    return (
       <main id='main' className='main' >
          <div className="pagetitle">

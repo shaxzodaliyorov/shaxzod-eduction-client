@@ -11,16 +11,20 @@ const Video = () => {
    const [videos, setVideos] = useState([]);
    const [count, setCount] = useState(GetItem('count_video') ? GetItem('count_video') : 0)
    const [active, setActive] = useState(GetItem('activeVideo') ? GetItem('activeVideo') : "")
-
+   const [loading, setLoading] = useState(false)
    const GetCourse = async () => {
+      setLoading(true)
       const data = await COURSES.GETONE(id);
       setCourse(data);
+      setLoading(false)
    };
 
    const GetVideos = async () => {
       try {
+         setLoading(true)
          const videos = await VIDEOS.GET(id);
          setVideos(videos);
+         setLoading(false)
          // setActive(videos !== [] ? videos[0]._id : "")
       } catch (error) {
          console.log(error);
@@ -53,7 +57,7 @@ const Video = () => {
             </nav>
          </div>
          <section className="section px-2">
-            <div className="row">
+            {<div className="row">
                <div className="col-lg-6">
                   <div className="card">
                      <iframe
@@ -92,7 +96,7 @@ const Video = () => {
                      </div>
                   </div>
                </div>
-            </div>
+            </div>}
          </section>
       </main>
    );

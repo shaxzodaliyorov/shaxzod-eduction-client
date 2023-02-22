@@ -5,14 +5,18 @@ import { useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import CourseAboudLayoutRight from '../Components/CourseAboudLayoutRight'
 import CourseAboutLayoutleft from '../Components/CourseAboutLayoutleft'
+import Loader from '../Components/Loader'
 import COURSES from '../services/courses/Courses'
 const CourseAbout = () => {
   const { logined } = useSelector(state => state.AuthLogin)
   const [course, setCourse] = useState({})
+  const [loader, setLoader] = useState(false)
   const { id } = useParams()
   useEffect(() => {
     const GetOneCourse = async () => {
+      setLoader(true)
       const data = await COURSES.GETONE(id)
+      setLoader(false)
       setCourse(data)
     }
     GetOneCourse()
@@ -30,10 +34,8 @@ const CourseAbout = () => {
         </nav>
       </div>
       <section className="section px-2" >
-        <div className="row">
-          {/*  */}
+        {loader ? <Loader /> : <div className="row">
           <CourseAboutLayoutleft title={course.title} logined={logined} courseImg={course.courseImg} id={id} />
-          {/* {} */}
           <CourseAboudLayoutRight title={course.title} tech={course.tech} techimg={course.techimg} price={course.price} videos={course.videos} hours={course.hours} dagree={course.dagree} language={course.language} />
           <div className="col-lg-6"></div>
           <div className="col-lg-6">
@@ -44,7 +46,7 @@ const CourseAbout = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
       </section>
     </main>
   )
