@@ -62,9 +62,10 @@ const Video = () => {
                      <iframe
                         src={videos[count] !== undefined ? videos[count].videolink : ""}
                         title="YouTube video player"
-                        frameBorder="0"
                         style={{ width: "100%", height: "350px" }}
                         allowfullscreen
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                      ></iframe>
                   </div>
                </div>
@@ -83,8 +84,8 @@ const Video = () => {
                                        className={`list-group-item list-group-item-action ${active === item._id ? 'active' : ''} `}
                                     >
                                        <div className="row">
-                                          <div className="col-6">{item.title}</div>
-                                          <div className="col-6 text-end">
+                                          <div className="col-10">{item.title}</div>
+                                          <div className="col-2 text-end">
                                              {item.videoLength}
                                           </div>
                                        </div>
