@@ -40,7 +40,6 @@ const Video = () => {
       GetVideos();
       GetCourse();
    }, []);
-   console.log(active)
    return (
       <main id="main" className="main">
          <div className="pagetitle px-2">
@@ -65,6 +64,7 @@ const Video = () => {
                         title="YouTube video player"
                         frameBorder="0"
                         style={{ width: "100%", height: "350px" }}
+                        allowfullscreen
                      ></iframe>
                   </div>
                </div>
