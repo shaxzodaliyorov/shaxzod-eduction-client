@@ -1,12 +1,10 @@
-import React from 'react'
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { API } from '../API/Config'
-import AUTH from '../services/Auth/Auth'
-import Error from '../Components/Error'
-import { successRegister, ErrorRegsiter } from '../redux/Reducers/Auth/AuthRegister'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import Error from '../Components/Error'
 import Loading from '../Components/Loading'
+import { ErrorRegsiter, successRegister } from '../redux/Reducers/Auth/AuthRegister'
+import AUTH from '../services/Auth/Auth'
 const Register = () => {
 
    const navigate = useNavigate()
@@ -25,6 +23,10 @@ const Register = () => {
    const [emailValid, setEmailValid] = useState({ ms: '', active: false, sendval: false })
    const [usernameValid, setusernameValid] = useState({ ms: '', active: false, sendval: false })
    const [passwordValid, setPasswordValid] = useState({ ms: '', active: false, sendval: false })
+
+   React.useEffect(()=>{
+      document.title = "Shaxzod | Ro'yxatdan o'tish"
+   },[])
 
    const HandelerChange = e => {
       const { name, value } = e.target

@@ -20,6 +20,10 @@ const VIDEOS = {
    async UPDATE(videoid, userid, updateVideoData) {
       const { data } = await API.put(`/videos/update/${videoid}/${userid}`, updateVideoData)
       return data
+   },
+   async GET_VIDEO(videoid,userid){
+      const {data} = await API.get(`/videos/get/${videoid}/${userid}`)
+      return data
    }
 }
 

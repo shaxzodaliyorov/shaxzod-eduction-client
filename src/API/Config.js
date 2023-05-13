@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 export const API = axios.create({
-  baseURL: "https://shaxzod-eduction-server.onrender.com/api",
+	baseURL: 'http://localhost:4000/api',
 });

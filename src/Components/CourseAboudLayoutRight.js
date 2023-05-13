@@ -1,6 +1,7 @@
 import React from 'react'
 
 const CourseAboudLayoutRight = ({ title, price, techimg, tech, videos, hours, dagree, language }) => {
+  console.log(dagree)
   return (
     <>
       <div className="col-lg-6">
@@ -14,7 +15,7 @@ const CourseAboudLayoutRight = ({ title, price, techimg, tech, videos, hours, da
             </div>
             <ul className="list-group"  >
               <li className="list-group-item  py-4 " style={{ display: 'flex', justifyContent: 'space-between' }} > {techimg ? <img src={techimg} style={{ width: '35px', height: "35px", borderRadius: '50%' }} alt={title} /> : <i className="bi bi-person-circle"> &nbsp;&nbsp;&nbsp; Ustoz </i>} {tech}</li>
-              <li className="list-group-item  py-4 " style={{ display: 'flex', justifyContent: 'space-between' }} ><i className="bi bi-currency-dollar"> &nbsp;&nbsp;&nbsp; Narxi</i> {price}</li>
+              <li className="list-group-item  py-4 " style={{ display: 'flex', justifyContent: 'space-between' }} ><i className="bi bi-currency-dollar"> &nbsp;&nbsp;&nbsp; Narxi</i> {price?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</li>
               <li className="list-group-item  py-4 " style={{ display: 'flex', justifyContent: 'space-between' }} ><i className="bi bi-card-checklist"> &nbsp;&nbsp;&nbsp;  Darslar </i> {videos ? videos.length : "0"} ta</li>
               <li className="list-group-item  py-4 " style={{ display: 'flex', justifyContent: 'space-between' }} ><i className="bi bi-alarm"> &nbsp;&nbsp;&nbsp; Umumiy Soat </i> {hours}</li>
               <li className="list-group-item  py-4 " style={{ display: 'flex', justifyContent: 'space-between' }} ><i className="bi bi-bar-chart-line">&nbsp;&nbsp;&nbsp; Daraja </i>{dagree}</li>
