@@ -1,7 +1,11 @@
-import AdminEditCourseComponent from '../Components/admin-edit-course-component';
+import { useEffect } from "react";
+import AdminEditCourseComponent from "../Components/admin-edit-course-component";
 
 const EditCourse = () => {
-	return <AdminEditCourseComponent />;
+  useEffect(() => {
+    document.title = "Shaxzod | Kursni Tahrirlash ";
+  }, []);
+  return <AdminEditCourseComponent />;
 };
 
 export default EditCourse;

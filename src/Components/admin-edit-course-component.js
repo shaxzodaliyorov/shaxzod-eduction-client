@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Components/Loading';
 import COURSES from '../services/courses/Courses';
+import { api } from '../API/Config';
 const AdminEditCourseComponent = () => {
 	const { slug } = useParams();
 
@@ -73,7 +74,7 @@ const AdminEditCourseComponent = () => {
 														kurs rasmi
 													</label>{' '}
 													<br />
-													<img width={'100'} height={'100'} src={courseImg} alt={title} />
+													<img width={'100'} height={'100'} src={api+courseImg} alt={title} />
 												</div>
 												<div className='col-12'>
 													<label htmlFor='title' className='form-label'>

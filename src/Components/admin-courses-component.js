@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { api } from "../API/Config";
 import COURSES from "../services/courses/Courses";
 
 const AdminCoursesComponent = () => {
@@ -22,6 +23,7 @@ const AdminCoursesComponent = () => {
     try {
       await COURSES.DELETE(id, user._id);
       getResult();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -79,7 +81,7 @@ const AdminCoursesComponent = () => {
                   <td>{item.videos.length}</td>
                   <td>
                     <img
-                      src={item.courseImg}
+                      src={api+item.courseImg}
                       width="40"
                       height={"40"}
                       alt={"shaxzod aliyorov"}

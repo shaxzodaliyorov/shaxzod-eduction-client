@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import COURSES from "../services/courses/Courses";
 import VIDEOS from "../services/videos/Videos";
 
 const AdminVidoesComponent = () => {
@@ -8,11 +9,11 @@ const AdminVidoesComponent = () => {
 
   const [videos, setVideos] = useState([]);
   const [video, setVideo] = useState({});
-
+  const [courses, setCourses] = useState([]);
   const { user } = useSelector((state) => state.AuthLogin);
 
   const GetVideos = async () => {
-    const res = await VIDEOS.GETALL();
+    const res = await VIDEOS.GETALL(user._id);
     res && setVideos(res);
   };
 
@@ -31,6 +32,8 @@ const AdminVidoesComponent = () => {
     GetVideos();
   }, []);
 
+  COURSES.GET().then(res=>setCourses(res))
+
   return (
     <>
       <div className="row py-2">
@@ -41,6 +44,7 @@ const AdminVidoesComponent = () => {
           <button
             className="btn btn-sm btn-success"
             onClick={() => navigate("/admin/add-video")}
+            disabled={!courses.length ? true : false}
           >
             video Qo'shish
           </button>

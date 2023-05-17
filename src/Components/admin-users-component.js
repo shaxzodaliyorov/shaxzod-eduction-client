@@ -13,10 +13,9 @@ const AdminUsersComponent = () => {
     <>
       <div className="row py-2">
         <div className="col-6">
-          <h3>Barcha Kurslar</h3>
+          <h3>Barcha Studentlar</h3>
         </div>
         <div className="col-6 text-end">
-          <button className="btn btn-sm btn-success">Add course</button>
         </div>
       </div>
       <div className="card">
@@ -39,7 +38,7 @@ const AdminUsersComponent = () => {
             <tbody>
               {users.map((item, index) => {
                 return (
-                  <tr className="table-active ">
+                  <tr className="table-active " key={index} >
                     <td>{index + 1}</td>
                     <td className={item.isadmin ? "table-success" : ""}>
                       {item.isadmin ? "Admin" : "Student"}

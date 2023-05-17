@@ -84,7 +84,9 @@ const Profile = () => {
     setTimeout(() => {
       Close();
     }, 2000);
+    document.title = "Shaxzod | Mening Profilim ";
   }, []);
+
   return (
     <main id="main" className="main">
       <div className="pagetitle">

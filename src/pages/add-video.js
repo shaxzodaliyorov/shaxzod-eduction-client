@@ -1,7 +1,11 @@
-import AdminAddVideoComponet from '../Components/admin-add-video-componet';
+import { useEffect } from "react";
+import AdminAddVideoComponet from "../Components/admin-add-video-componet";
 
 const AddVideo = () => {
-	return <AdminAddVideoComponet />;
+  useEffect(() => {
+    document.title = "Shaxzod | Video Qo'shish ";
+  }, []);
+  return <AdminAddVideoComponet />;
 };
 
 export default AddVideo;

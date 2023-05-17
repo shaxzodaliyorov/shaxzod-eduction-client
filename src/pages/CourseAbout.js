@@ -48,6 +48,7 @@ const CourseAbout = () => {
 							logined={logined}
 							courseImg={course?.courseImg}
 							id={course?._id}
+							courseItem={course}
 						/>
 						<CourseAboudLayoutRight
 							title={course?.title}

@@ -5,8 +5,8 @@ const VIDEOS = {
       const { data } = await API.get(`/videos/get/${courseid}`)
       return data
    },
-   async GETALL() {
-      const { data } = await API.get(`/videos/allget/`)
+   async GETALL(userid) {
+      const { data } = await API.get(`/videos/all/${userid}`)
       return data
    },
    async ADDVIDEO(courseid, userid, videodata) {
@@ -22,7 +22,7 @@ const VIDEOS = {
       return data
    },
    async GET_VIDEO(videoid,userid){
-      const {data} = await API.get(`/videos/get/${videoid}/${userid}`)
+      const {data} = await API.get(`/videos/one/${videoid}/${userid}`)
       return data
    }
 }

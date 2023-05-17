@@ -45,7 +45,7 @@ const AdminAddCourseComponent = () => {
 				await COURSES.ADDCOURSE(user._id, formData);
 				navigate('/admin');
 			} catch (error) {
-				console.log(error);
+				console.log(error.response.data);
 			}
 		} else {
 			alert("Iltimos Malumot hammasini to'ldiring !");
